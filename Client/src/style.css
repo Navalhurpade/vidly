@@ -1,0 +1,19 @@
+main {
+  margin-top: 8vh;
+}
+
+.clickble {
+  cursor: pointer;
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+.min-width {
+  min-width: 10vw;
+}
+
+nav {
+  margin: 50px 0;
+}
