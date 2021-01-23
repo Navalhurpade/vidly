@@ -39,7 +39,7 @@ class movie extends Component {
   //Handing Movie Delete button for movie ! and deletiing a movie with same ID
   handleDelete = async (id) => {
     const { allMovies } = this.state;
-    const originalMovies = allMovies;
+    const originalMovies = [...allMovies];
 
     let movieInDb = allMovies.find((m) => m._id === id);
     allMovies.splice(allMovies.indexOf(movieInDb), 1);
@@ -51,8 +51,12 @@ class movie extends Component {
     try {
       await deleteMovie(id);
     } catch (error) {
-      console.error(error);
-      toast.error("This movie is already deleted !");
+      if (error.response && error.response.status === 403)
+        toast.error("You are not authorize to do it !");
+      else if (error.response && error.response.status === 400)
+        toast.error("Please login frist !");
+      else toast.error("This movie is already deleted !");
+
       this.setState({ allMovies: originalMovies });
     }
   };
@@ -195,6 +199,7 @@ class movie extends Component {
       handleGenre,
       handleSort,
       getPagedData,
+      props,
     } = this;
     const {
       currentPageNo,
@@ -225,9 +230,13 @@ class movie extends Component {
           </div>
 
           <div className="col">
-            <Link to="/movie/new" className="btn btn-primary">
-              New Movie
-            </Link>
+            {
+              //props.user && (
+              <Link to="/movie/new" className="btn btn-primary">
+                New Movie
+              </Link>
+              // )}
+            }
 
             <Input
               name="search"

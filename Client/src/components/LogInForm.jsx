@@ -1,6 +1,7 @@
 import React from "react";
 import joi from "joi-browser";
 import Form from "./comman/Form";
+import { login } from "../services/authService";
 
 class LoginForm extends Form {
   state = {
@@ -16,8 +17,17 @@ class LoginForm extends Form {
     password: joi.string().required().label("Password"),
   };
 
-  doSubmit = () => {
-    console.log("Submited !");
+  doSubmit = async () => {
+    try {
+      await login(this.state.data);
+      window.location = "/";
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        const errors = { ...this.state.errors };
+        errors.username = "Invalid email or password !";
+        this.setState({ errors });
+      }
+    }
   };
 
   render() {
